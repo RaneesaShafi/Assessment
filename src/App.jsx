@@ -1,10 +1,17 @@
+
 import "./App.css";
 import Layout from "./components/Layout/Layout";
+import { SeasonProvider } from "./context/SeasonContext";
 
 function App() {
+
+
   return (
     <>
-      <Layout />
+    <SeasonProvider>
+       <Layout />
+      </SeasonProvider>
+
     </>
   );
 }

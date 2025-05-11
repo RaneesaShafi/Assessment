@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { GoSearch } from "react-icons/go";
 import { FaAngleDown } from "react-icons/fa6";
+import { useSeason } from '../../context/SeasonContext';
 
-const TopNavbar = () => {
+const TopNavbar = ({ isSidebarOpen }) => {
   const [isSeasonDropdownOpen, setIsSeasonDropdownOpen] = useState(false);
   const [seasons, setSeasons] = useState([]);
-  const [selectedSeason, setSelectedSeason] = useState("Season");
+  const {selectedSeason, setSelectedSeason} = useSeason();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetching seasons from API
+
   useEffect(() => {
     const fetchSeasons = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await fetch("https://api.jolpi.ca/ergast/f1/seasons");
+        const response = await fetch("https://api.jolpi.ca/ergast/f1/seasons/?limit=30&offset=60");
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -24,7 +25,7 @@ const TopNavbar = () => {
 
         const data = await response.json();
 
-        //getting seasons from API response
+
         const seasonYears = data.MRData.SeasonTable.Seasons.map(
           (season) => season.season
         );
@@ -56,27 +57,31 @@ const TopNavbar = () => {
 
   return (
     <div
-      className="top-nav fixed w-[calc(100%-250px)] h-[55px] top-0 left-[250px] z-[999]"
+      className={`top-nav fixed h-[55px] top-0 z-[999] transition-all duration-300 ${
+        isSidebarOpen 
+          ? 'left-[250px] w-[calc(100%-250px)]' 
+          : 'left-0 w-full md:left-[250px] md:w-[calc(100%-250px)]'
+      }`}
       style={{ backgroundColor: "var(--primary-color)" }}
     >
-      <div className="top_nav_wrapper flex items-center justify-between h-full px-8">
+      <div className="top_nav_wrapper flex items-center justify-between h-full px-16 md:px-8 transition-all duration-300">
         <div className="search_box flex items-center">
           <input
             type="text"
             placeholder="search or type"
-            className="px-5  text-gray-500 rounded-md bg-amber-50 w-[200px] focus:outline-none"
+            className="px-4 py-1 text-gray-500 rounded-md bg-amber-50 w-[160px] md:w-[200px] focus:outline-none transition-all duration-300"
           />
-          <span className="ml-[-30px]">
+          <span className="ml-[-25px] md:ml-[-30px]">
             <GoSearch className="text-gray-500 text-lg" />
           </span>
         </div>
 
-        <div className="top_nav_right flex items-center gap-4 relative">
+        <div className="top_nav_right flex items-center gap-2 md:gap-4 relative">
           <div
-            className="season flex items-center gap-2 text-gray-400 text-sm font-medium cursor-pointer hover:bg-white/10 px-3 py-1 rounded-md transition-all"
+            className="season flex items-center gap-2 text-gray-400 text-sm font-medium cursor-pointer hover:bg-white/10 px-2 py-1 md:px-3 rounded-md transition-all"
             onClick={toggleSeasonDropdown}
           >
-            {selectedSeason}
+            <span className="hidden sm:inline">Season:</span> {selectedSeason}
             <FaAngleDown
               className={`text-white text-xs transition-transform ${
                 isSeasonDropdownOpen ? "rotate-180" : ""
@@ -85,6 +90,7 @@ const TopNavbar = () => {
           </div>
 
           {/* Season Dropdown */}
+          
           {isSeasonDropdownOpen && (
             <div className="absolute right-0 top-full mt-1 w-32 bg-white rounded-md shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
               {loading ? (

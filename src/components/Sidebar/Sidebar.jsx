@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { GiRaceCar } from "react-icons/gi";
 import { NavLink } from "react-router-dom";
 import { RiDashboardFill } from "react-icons/ri";
 import { FaCarOn } from "react-icons/fa6";
 import { GiSteeringWheel } from "react-icons/gi";
 import { RiTeamFill } from "react-icons/ri";
-import { GrPowerShutdown } from "react-icons/gr";
+import { MdOutlineFeedback } from "react-icons/md";
 import { FiMenu, FiX } from "react-icons/fi";
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const navLinks = [
     {
       path: "/dashboard",
@@ -24,12 +22,12 @@ const Sidebar = () => {
     },
     {
       path: "/drivers",
-      icon: <GiSteeringWheel />,
+      icon: <RiTeamFill />,
       display: "Drivers",
     },
     {
       path: "/constructors",
-      icon: <RiTeamFill />,
+      icon: <GiSteeringWheel />,
       display: "Constructors",
     },
   ];
@@ -55,21 +53,22 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`sidebar   w-[240px] h-full fixed top-0 left-0 z-[999] p-4 transition-all duration-300 ease-in-out"
-      ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        className={`sidebar w-[240px] h-full fixed top-0 left-0 z-[999] p-4 transition-all duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
         style={{ backgroundColor: "var(--primary-color)" }}
       >
-        <div className="sidebar_top   w-full h-[40px] 	 ">
-          <h2 className="flex  items-center gap-x-2 text-white font-bold text-2xl ">
-            <span className="w-[40px] h-[37px]  flex items-center justify-center rounded-full border-indigo-400 border-2 bg-indigo-400 ">
-              <GiRaceCar className="text-3xl " />
+        <div className="sidebar_top w-full h-[40px]">
+          <h2 className="flex items-center gap-x-2 text-white font-bold text-2xl">
+            <span className="w-[40px] h-[37px] flex items-center justify-center rounded-full border-indigo-400 border-2 bg-indigo-400">
+              <GiRaceCar className="text-3xl" />
             </span>
             SpeedeX
           </h2>
         </div>
 
-        <div className="sidebar_content flex justify-between flex-col h-[calc(100%-80px)]  mt-8 ">
-          <div className="menu h-[80%] overflow-y-auto ">
+        <div className="sidebar_content flex justify-between flex-col h-[calc(100%-80px)] mt-8">
+          <div className="menu h-[80%] overflow-y-auto">
             <ul className="nav_list flex flex-col gap-[2rem]">
               {navLinks.map((item, index) => (
                 <li key={index}>
@@ -77,8 +76,8 @@ const Sidebar = () => {
                     to={item.path}
                     className={({ isActive }) =>
                       isActive
-                        ? "flex items-center gap-2 p-1  text-white  bg-white/10 font-semibold  rounded-md   "
-                        : "flex items-center gap-2 p-1 text-gray-400 hover:text-white  "
+                        ? "flex items-center gap-2 p-1 text-white bg-white/10 font-semibold rounded-md"
+                        : "flex items-center gap-2 p-1 text-gray-400 hover:text-white"
                     }
                     onClick={() => setIsOpen(false)}
                   >
@@ -90,18 +89,26 @@ const Sidebar = () => {
             </ul>
           </div>
 
-          <div className="sidebar_bottom  h-[20%] flex  cursor-pointer  ">
-            <span className="gap-2 flex items-center justify-center text-gray-400 hover:text-white  ">
-              <GrPowerShutdown className="inline-block " />
-              Logout
-            </span>
+          <div className="sidebar_bottom">
+            <NavLink
+              to="/feedback"
+              className={({ isActive }) =>
+                isActive
+                  ? "flex items-center gap-2 p-1 text-white bg-white/10 font-semibold rounded-md"
+                  : "flex items-center gap-2 p-1 text-gray-400 hover:text-white"
+              }
+              onClick={() => setIsOpen(false)}
+            >
+              <MdOutlineFeedback className="inline-block" />
+              Feedback
+            </NavLink>
           </div>
         </div>
       </div>
 
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-opacity-50 z-[998]"
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-[998]"
           onClick={toggleSidebar}
         />
       )}

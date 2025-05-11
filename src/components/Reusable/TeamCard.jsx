@@ -5,7 +5,9 @@ const TeamCard = (props) => {
 
   return (
     <div>
-      <div className="single_card  p-3 flex items-center justify-between rounded-md  bg-[#ef6213]">
+      <div className="single_card  p-3 flex items-center justify-between rounded-md  bg-[#ef6213]  transition-all duration-300 ease-in-out
+                                hover:scale-105 hover:shadow-2xl hover:border-[#FF8700] hover:z-10
+                                group">
         <div className="card_content">
           <h4 className="text-white text-xl ">{title}</h4>
           <span className="text-white text-sm">{nationality}</span>
